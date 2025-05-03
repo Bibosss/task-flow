@@ -11,14 +11,6 @@ interface FlowState {
   edges: Edge[];
 }
 
-const saveState = debounce((state: FlowState) => {
-  try {
-    localStorage.setItem('flow-state', JSON.stringify(state));
-  } catch (e) {
-    console.error('Помилка збереження стану:', e);
-  }
-}, 500);
-
 const loadFromLocalStorage = (): FlowState => {
   try {
     const saved = localStorage.getItem('flow-state');
@@ -27,6 +19,14 @@ const loadFromLocalStorage = (): FlowState => {
     return { nodes: [], edges: [] };
   }
 };
+
+const saveState = debounce((state: FlowState) => {
+  try {
+    localStorage.setItem('flow-state', JSON.stringify(state));
+  } catch (e) {
+    console.error('Error saving state:', e);
+  }
+}, 500);
 
 const initialState: FlowState = loadFromLocalStorage();
 
