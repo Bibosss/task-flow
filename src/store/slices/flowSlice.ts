@@ -2,8 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Node, Edge, Connection } from 'reactflow';
 import { debounce } from 'lodash';
 
+interface NodeData {
+  label: string;
+}
+
 interface FlowState {
-  nodes: Node[];
+  nodes: Node<NodeData>[];
   edges: Edge[];
 }
 
@@ -30,20 +34,24 @@ export const flowSlice = createSlice({
   name: 'flow',
   initialState,
   reducers: {
-    addNode: (state, action: PayloadAction<Node>) => {
+    addNode: (state, action: PayloadAction<Node<NodeData>>) => {
       state.nodes.push(action.payload);
       saveState(state);
     },
-    updateNode: (state, action: PayloadAction<{ id: string; data: any }>) => {
+    updateNode: (
+      state,
+      action: PayloadAction<{ id: string; data: Partial<NodeData> }>
+    ) => {
       const node = state.nodes.find(n => n.id === action.payload.id);
       if (node) {
-        node.data = action.payload.data;
+        node.data = { ...node.data, ...action.payload.data };
         saveState(state);
       }
     },
     connectNodes: (state, action: PayloadAction<Connection>) => {
       const { source, target } = action.payload;
-      const newEdge = {
+      if (!source || !target) return;
+      const newEdge: Edge = {
         id: `edge-${source}-${target}`,
         source,
         target,

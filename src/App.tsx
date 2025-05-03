@@ -7,6 +7,7 @@ import ReactFlow, {
   applyEdgeChanges,
   NodeChange,
   EdgeChange,
+  NodeMouseHandler,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useAppDispatch, useAppSelector } from './store/hooks';
@@ -32,7 +33,7 @@ const Flow = () => {
     dispatch(connectNodes(connection));
   };
 
-  const onNodeClick = (_: React.MouseEvent, node: Node) => {
+  const onNodeClick: NodeMouseHandler = (_, node) => {
     setSelectedNodeId(node.id);
   };
 

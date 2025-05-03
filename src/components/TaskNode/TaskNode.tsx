@@ -1,4 +1,4 @@
-import { NodeProps, Handle } from 'reactflow';
+import { NodeProps, Handle, Position } from 'reactflow';
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../store/hooks';
 import { updateNode } from '../../store/slices/flowSlice';
@@ -24,7 +24,7 @@ const TaskNode = ({ id, data, selected }: NodeProps) => {
 
   return (
     <div className={`${styles.taskNode} ${selected ? styles.selected : ''}`}>
-      <Handle type="target" position="top" className={styles.handle} />
+      <Handle type="target" position={Position.Top} className={styles.handle} />
 
       {isEditing ? (
         <input
@@ -41,7 +41,11 @@ const TaskNode = ({ id, data, selected }: NodeProps) => {
         </div>
       )}
 
-      <Handle type="source" position="bottom" className={styles.handle} />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className={styles.handle}
+      />
     </div>
   );
 };

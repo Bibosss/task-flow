@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.7.0",
+    "@types/lodash-es": "^4.17.12",
     "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
