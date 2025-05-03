@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Node } from 'reactflow';
 import { useAppDispatch } from '../../store/hooks';
 import { updateNode } from '../../store/slices/flowSlice';
-
-interface SidebarProps {
-  selectedNode: Node | null;
-  onClose: () => void;
-}
+import { SidebarProps } from '../../types/flow';
 
 const Sidebar = ({ selectedNode, onClose }: SidebarProps) => {
   const dispatch = useAppDispatch();

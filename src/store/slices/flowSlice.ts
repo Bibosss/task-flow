@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Node, Edge, Connection } from 'reactflow';
-
-interface NodeData {
-  label: string;
-}
-
-interface FlowState {
-  nodes: Node<NodeData>[];
-  edges: Edge[];
-}
+import { FlowState, NodeData } from '../../types/flow';
 
 const loadFromLocalStorage = (): FlowState => {
   try {

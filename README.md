@@ -1,54 +1,37 @@
-# React + TypeScript + Vite
+# Flow Task Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Додаток для візуалізації та управління задачами з використанням React Flow та
+Redux Toolkit.
 
-Currently, two official plugins are available:
+## Основні можливості
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Додавання задач (нод) на полотно
+- Перетягування блоків (drag & drop)
+- Редагування назви задачі прямо в ноді або через бокову панель
+- З'єднання задач стрілками (edges)
+- Автоматичне збереження стану в localStorage
 
-## Expanding the ESLint configuration
+## Технології
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React
+- Redux Toolkit
+- React Flow
+- TypeScript
+- CSS Modules
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Як запустити
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. **Клонуйте репозиторій:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```bash
+   git clone https://github.com/ваш-репозиторій/flow-task.git
+   cd flow-task
+   npm install
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+2. **Запустіть додаток:** npm run dev
+
+3. **Відкрийте в браузері:** http://localhost:5173
+
+**Доступні команди** npm run dev # Запуск додатка у режимі розробки, npm run
+build # Збірка для продакшену
