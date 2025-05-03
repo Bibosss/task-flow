@@ -1,0 +1,42 @@
+.taskNode {
+  padding: 10px 15px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.taskNode.selected {
+  border-color: #1890ff;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+}
+
+.nodeInput {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.nodeLabel {
+  cursor: pointer;
+  padding: 5px;
+  margin: 5px 0;
+}
+
+.handle {
+  width: 8px;
+  height: 8px;
+  background: #555;
+  border: 2px solid #fff;
+  border-radius: 50%;
+}
+
+.handle.source {
+  bottom: -6px;
+}
+
+.handle.target {
+  top: -6px;
+}

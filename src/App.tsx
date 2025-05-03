@@ -1,35 +1,83 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import ReactFlow, {
+  Background,
+  Controls,
+  Connection,
+  ReactFlowProvider,
+  applyNodeChanges,
+  applyEdgeChanges,
+  NodeChange,
+  EdgeChange,
+} from 'reactflow';
+import 'reactflow/dist/style.css';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { useState } from 'react';
+import TaskNode from './components/TaskNode/TaskNode';
+import Sidebar from './components/Sidebar/Sidebar';
+import ControlsPanel from './components/ControlsPanel/ControlsPanel';
+import { connectNodes, setNodes, setEdges } from './store/slices/flowSlice';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const nodeTypes = {
+  task: TaskNode,
+};
+
+const Flow = () => {
+  const dispatch = useAppDispatch();
+  const { nodes, edges } = useAppSelector(state => state.flow);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+
+  const selectedNode = nodes.find(n => n.id === selectedNodeId) || null;
+
+  const onConnect = (connection: Connection) => {
+    dispatch(connectNodes(connection));
+  };
+
+  const onNodeClick = (_: React.MouseEvent, node: Node) => {
+    setSelectedNodeId(node.id);
+  };
+
+  const onPaneClick = () => {
+    setSelectedNodeId(null);
+  };
+
+  const onNodesChange = (changes: NodeChange[]) => {
+    dispatch(setNodes(applyNodeChanges(changes, nodes)));
+  };
+
+  const onEdgesChange = (changes: EdgeChange[]) => {
+    dispatch(setEdges(applyEdgeChanges(changes, edges)));
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="app-container">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onNodeClick={onNodeClick}
+        onPaneClick={onPaneClick}
+        nodeTypes={nodeTypes}
+        fitView
+      >
+        <Background />
+        <Controls />
+      </ReactFlow>
 
-export default App
+      <ControlsPanel />
+      <Sidebar
+        selectedNode={selectedNode}
+        onClose={() => setSelectedNodeId(null)}
+      />
+    </div>
+  );
+};
+
+const App = () => (
+  <ReactFlowProvider>
+    <Flow />
+  </ReactFlowProvider>
+);
+
+export default App;

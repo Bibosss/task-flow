@@ -1,53 +1,67 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Node, Edge } from 'reactflow';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Node, Edge, Connection } from 'reactflow';
+import { debounce } from 'lodash';
 
 interface FlowState {
   nodes: Node[];
   edges: Edge[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
 }
 
-const initialState: FlowState = {
-  nodes: [],
-  edges: [],
-  status: 'idle',
+const saveState = debounce((state: FlowState) => {
+  try {
+    localStorage.setItem('flow-state', JSON.stringify(state));
+  } catch (e) {
+    console.error('Помилка збереження стану:', e);
+  }
+}, 500);
+
+const loadFromLocalStorage = (): FlowState => {
+  try {
+    const saved = localStorage.getItem('flow-state');
+    return saved ? JSON.parse(saved) : { nodes: [], edges: [] };
+  } catch {
+    return { nodes: [], edges: [] };
+  }
 };
 
-export const fetchInitialFlow = createAsyncThunk(
-  'flow/fetchInitialFlow',
-  async () => {
-    const savedFlow = localStorage.getItem('flow');
-    return savedFlow ? JSON.parse(savedFlow) : { nodes: [], edges: [] };
-  }
-);
+const initialState: FlowState = loadFromLocalStorage();
 
-const flowSlice = createSlice({
+export const flowSlice = createSlice({
   name: 'flow',
   initialState,
   reducers: {
     addNode: (state, action: PayloadAction<Node>) => {
       state.nodes.push(action.payload);
+      saveState(state);
     },
-    updateNode: (state, action: PayloadAction<Node>) => {
-      const index = state.nodes.findIndex(n => n.id === action.payload.id);
-      if (index !== -1) state.nodes[index] = action.payload;
+    updateNode: (state, action: PayloadAction<{ id: string; data: any }>) => {
+      const node = state.nodes.find(n => n.id === action.payload.id);
+      if (node) {
+        node.data = action.payload.data;
+        saveState(state);
+      }
     },
-    addEdge: (state, action: PayloadAction<Edge>) => {
-      state.edges.push(action.payload);
+    connectNodes: (state, action: PayloadAction<Connection>) => {
+      const { source, target } = action.payload;
+      const newEdge = {
+        id: `edge-${source}-${target}`,
+        source,
+        target,
+      };
+      state.edges.push(newEdge);
+      saveState(state);
     },
-  },
-  extraReducers: builder => {
-    builder
-      .addCase(fetchInitialFlow.pending, state => {
-        state.status = 'loading';
-      })
-      .addCase(fetchInitialFlow.fulfilled, (state, action) => {
-        state.nodes = action.payload.nodes;
-        state.edges = action.payload.edges;
-        state.status = 'succeeded';
-      });
+    setNodes: (state, action: PayloadAction<Node[]>) => {
+      state.nodes = action.payload;
+      saveState(state);
+    },
+    setEdges: (state, action: PayloadAction<Edge[]>) => {
+      state.edges = action.payload;
+      saveState(state);
+    },
   },
 });
 
-export const { addNode, updateNode, addEdge } = flowSlice.actions;
+export const { addNode, updateNode, connectNodes, setNodes, setEdges } =
+  flowSlice.actions;
 export default flowSlice.reducer;
