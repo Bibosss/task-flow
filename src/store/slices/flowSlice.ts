@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Node, Edge, Connection } from 'reactflow';
-import { debounce } from 'lodash';
 
 interface NodeData {
   label: string;
@@ -20,13 +19,13 @@ const loadFromLocalStorage = (): FlowState => {
   }
 };
 
-const saveState = debounce((state: FlowState) => {
+const saveState = (state: FlowState) => {
   try {
     localStorage.setItem('flow-state', JSON.stringify(state));
   } catch (e) {
     console.error('Error saving state:', e);
   }
-}, 500);
+};
 
 const initialState: FlowState = loadFromLocalStorage();
 
@@ -35,6 +34,7 @@ export const flowSlice = createSlice({
   initialState,
   reducers: {
     addNode: (state, action: PayloadAction<Node<NodeData>>) => {
+      console.log('Додаємо вузол:', action.payload);
       state.nodes.push(action.payload);
       saveState(state);
     },
