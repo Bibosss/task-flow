@@ -11,7 +11,7 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useAppDispatch, useAppSelector } from './store/hooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import TaskNode from './components/TaskNode/TaskNode';
 import Sidebar from './components/Sidebar/Sidebar';
 import ControlsPanel from './components/ControlsPanel/ControlsPanel';
